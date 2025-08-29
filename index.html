@@ -14,7 +14,7 @@
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      touch-action: none; /* Блокує масштабування */
+      touch-action: none;
       background: #000;
     }
     #scanText {
@@ -41,13 +41,13 @@
       transform: translateX(-50%);
       background: #0055A4;
       color: #FFD700;
-      padding: 14px 28px;
+      padding: 15px 28px;
       border-radius: 30px;
-      font-size: 1.1em;
+      font-size: 1.2em;
       font-weight: bold;
       text-decoration: none;
       z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.4);
     }
     #smartLessaBtn:hover {
       background: #003087;
@@ -55,16 +55,16 @@
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:11 PM EEST — час пізнавати Україну!</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:18 PM EEST — час для знань!</div>
 
   <a-scene
     embedded
-    arjs="trackingMethod: best; detectionMode: mono_and_matrix; sourceType: webcam; facingBack: true; debugUIEnabled: false;"
+    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false;"
     renderer="colorFormat: rgba; clearAlpha: 0;"
     vr-mode-ui="enabled: false"
   >
     <a-marker preset="hiro" id="marker">
-      <a-entity id="quiz-container" position="0 0 0" rotation="-90 0 0" scale="0.2 0.2 0.2">
+      <a-entity id="quiz-container" position="0 0 0" rotation="-90 0 0" scale="0.18 0.18 0.18">
         <!-- Підказка -->
         <a-text
           id="hint-text"
@@ -73,16 +73,16 @@
           width="30"
           wrapCount="20"
           align="center"
-          color="white"
-          material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
+          color="#FFD700"
           position="0 3.5 0"
-          side="double"
+          material="shader: standard; color: #FFD700; emissive: #000000; emissiveIntensity: 0.3"
           text-shadow="2px 2px 4px #000"
+          side="double"
         ></a-text>
 
         <!-- Варіанти відповідей -->
-        <a-entity id="optionA" class="option" position="-1.5 1 0">
-          <a-plane width="3" height="0.8" color="#0055A4" opacity="0.8"></a-plane>
+        <a-entity id="optionA" class="option" position="-1.8 1 0">
+          <a-plane width="3.5" height="0.9" color="#0055A4" opacity="0.8"></a-plane>
           <a-text
             class="option-label"
             value=""
@@ -91,15 +91,15 @@
             wrapCount="18"
             align="center"
             color="white"
+            position="0 -0.35 0.01"
             material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
-            position="0 -0.3 0.01"
-            side="double"
             text-shadow="2px 2px 4px #000"
+            side="double"
           ></a-text>
         </a-entity>
 
         <a-entity id="optionB" class="option" position="0 1 0">
-          <a-plane width="3" height="0.8" color="#0055A4" opacity="0.8"></a-plane>
+          <a-plane width="3.5" height="0.9" color="#0055A4" opacity="0.8"></a-plane>
           <a-text
             class="option-label"
             value=""
@@ -108,15 +108,15 @@
             wrapCount="18"
             align="center"
             color="white"
+            position="0 -0.35 0.01"
             material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
-            position="0 -0.3 0.01"
-            side="double"
             text-shadow="2px 2px 4px #000"
+            side="double"
           ></a-text>
         </a-entity>
 
-        <a-entity id="optionC" class="option" position="1.5 1 0">
-          <a-plane width="3" height="0.8" color="#0055A4" opacity="0.8"></a-plane>
+        <a-entity id="optionC" class="option" position="1.8 1 0">
+          <a-plane width="3.5" height="0.9" color="#0055A4" opacity="0.8"></a-plane>
           <a-text
             class="option-label"
             value=""
@@ -125,10 +125,10 @@
             wrapCount="18"
             align="center"
             color="white"
+            position="0 -0.35 0.01"
             material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
-            position="0 -0.3 0.01"
-            side="double"
             text-shadow="2px 2px 4px #000"
+            side="double"
           ></a-text>
         </a-entity>
 
@@ -142,23 +142,23 @@
             wrapCount="22"
             align="center"
             color="#FFD700"
-            material="shader: standard; color: #FFD700; emissive: #000000; emissiveIntensity: 0.3"
             position="0 2 0"
-            side="double"
+            material="shader: standard; color: #FFD700; emissive: #000000; emissiveIntensity: 0.3"
             text-shadow="2px 2px 4px #000"
+            side="double"
           ></a-text>
-          <a-entity id="restart-btn" class="clickable" position="0 0.5 0">
-            <a-plane width="2.5" height="0.8" color="#FFD700" opacity="0.8"></a-plane>
+          <a-entity id="restart-btn" position="0 0.5 0">
+            <a-plane width="3" height="0.9" color="#FFD700" opacity="0.8"></a-plane>
             <a-text
               value="Розпочати знову"
               font="https://cdn.aframe.io/fonts/Roboto-msdf.json"
               width="20"
               align="center"
               color="black"
+              position="0 -0.35 0.01"
               material="shader: standard; color: black; emissive: #000000; emissiveIntensity: 0.3"
-              position="0 -0.3 0.01"
-              side="double"
               text-shadow="2px 2px 4px #000"
+              side="double"
             ></a-text>
           </a-entity>
         </a-entity>
@@ -238,7 +238,7 @@
     function handleAnswer(option) {
       if (option.dataset.correct === 'true') score++;
       currentRound++;
-      setTimeout(showHint, 500); // Плавний перехід
+      setTimeout(showHint, 500);
     }
 
     function showResult() {
@@ -255,13 +255,11 @@
       resultContainer.setAttribute('visible', true);
     }
 
-    // Обробники
     [optionA, optionB, optionC].forEach(opt => {
       opt.addEventListener('click', () => handleAnswer(opt));
     });
     restartBtn.addEventListener('click', startGame);
 
-    // Події маркера
     marker.addEventListener('markerFound', () => {
       scanText.style.display = 'none';
       startGame();
@@ -274,20 +272,30 @@
       [optionA, optionB, optionC].forEach(opt => opt.querySelector('.option-label').setAttribute('value', ''));
     });
 
-    // Фікс висоти
     function setHeight() {
       document.body.style.height = window.innerHeight + 'px';
     }
     window.addEventListener('resize', setHeight);
     setHeight();
 
-    // Перевірка камери
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-      .then(() => console.log('Доступ до камери надано'))
-      .catch(err => {
-        scanText.textContent = 'Дозвольте доступ до камери';
-        console.error('Помилка камери:', err);
-      });
+    // Покращена перевірка камери
+    document.addEventListener('DOMContentLoaded', () => {
+      const scene = document.querySelector('a-scene');
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        scanText.textContent = 'Ваш браузер не підтримує камеру. Використовуйте Chrome або Firefox.';
+        return;
+      }
+
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(stream => {
+          console.log('Камера ініціалізована:', stream);
+          scene.setAttribute('arjs', 'sourceType: webcam; detectionMode: mono; trackingMethod: best; facingBack: true; debugUIEnabled: false;');
+        })
+        .catch(err => {
+          scanText.textContent = 'Дозвольте доступ до камери або перевірте з’єднання.';
+          console.error('Помилка камери:', err.name, err.message);
+        });
+    });
   </script>
 </body>
 </html>
