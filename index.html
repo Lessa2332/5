@@ -13,6 +13,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      touch-action: none;
       background: #000;
     }
     #scanText {
@@ -28,12 +29,11 @@
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 11:13 PM EEST</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 11:18 PM EEST</div>
 
   <a-scene
     embedded
     arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: true;"
-    renderer="colorFormat: rgba; alpha: true; clearAlpha: 0; preserveDrawingBuffer: true;"
     vr-mode-ui="enabled: false"
   >
     <a-marker preset="hiro" id="marker">
@@ -43,46 +43,25 @@
   </a-scene>
 
   <script>
+    const marker = document.getElementById('marker');
     const scanText = document.getElementById('scanText');
-    const scene = document.querySelector('a-scene');
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        scanText.textContent = 'Ваш браузер не підтримує камеру. Використовуйте Chrome або Firefox.';
-        return;
-      }
-
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(stream => {
-          console.log('Камера ініціалізована:', stream);
-          scanText.style.display = 'none';
-          const video = document.createElement('video');
-          video.srcObject = stream;
-          video.play();
-
-          // Ініціалізація ARController за прикладом AR.js
-          const arjs = scene.systems['ar'];
-          if (arjs && arjs.context) {
-            arjs.context.baseImageUrl = 'https://raw.githack.com/AR-js-org/AR.js/master/data/';
-            arjs.context.init(video, { sourceType: 'webcam' })
-              .then(() => {
-                console.log('AR ініціалізований');
-              })
-              .catch(err => {
-                console.error('Помилка AR:', err);
-                scanText.textContent = 'Помилка AR. Перевірте консоль.';
-              });
-          } else {
-            console.error('AR система не знайдена');
-            scanText.textContent = 'Помилка AR. Перевірте консоль.';
-          }
-        })
-        .catch(err => {
-          scanText.textContent = 'Дозвольте доступ до камери або перевірте з’єднання.';
-          console.error('Помилка камери:', err.name, err.message);
-        });
+    marker.addEventListener('markerFound', () => {
+      scanText.style.display = 'none';
     });
+
+    marker.addEventListener('markerLost', () => {
+      scanText.style.display = 'block';
+    });
+
+    // Фікс висоти
+    function fixHeight() {
+      document.body.style.height = window.innerHeight + 'px';
+    }
+    window.addEventListener('resize', fixHeight);
+    fixHeight();
   </script>
 </body>
 </html>
+
 
