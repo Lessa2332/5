@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AR Гра: Перший День у Школі - Весело!</title>
+  <title>AR Гра: Символи України</title>
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
   <style>
@@ -41,8 +41,8 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #ff0044;
-      color: white;
+      background: #0055A4; /* Синій колір прапора */
+      color: #FFD700; /* Жовтий колір прапора */
       padding: 14px 24px;
       border-radius: 30px;
       font-size: 1.1em;
@@ -52,7 +52,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
     #smartLessaBtn:hover {
-      background: #cc0036;
+      background: #003087; /* Темніший синій */
     }
   </style>
 </head>
@@ -62,25 +62,25 @@
   <a-scene embedded id="arScene" arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; facingBack: true; debugUIEnabled: false;">
     <a-marker id="marker" preset="hiro">
       <!-- Контейнер для гри -->
-      <a-entity id="game-container" position="0 0 0" rotation="-90 0 0" scale="0.1 0.1 0.1">
-        <a-text id="event-text" value="" position="0 3 0" width="20" align="center" color="white"></a-text>
-        <a-entity id="choiceA" class="choice" position="0 1.5 0">
-          <a-plane width="3" height="0.8" material="color: #0055A4; opacity: 0.7"></a-plane>
-          <a-text value="" width="18" align="center" color="white" position="0 -0.3 0.01"></a-text>
+      <a-entity id="quiz-container" position="0 0 0" rotation="-90 0 0" scale="0.15 0.15 0.15">
+        <a-text id="hint-text" value="" position="0 4 0" width="25" align="center" color="white" material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.2"></a-text>
+        <a-entity id="optionA" class="option" position="0 2 0">
+          <a-plane width="4" height="1" material="color: #0055A4; opacity: 0.7"></a-plane>
+          <a-text value="" width="22" align="center" color="white" position="0 -0.4 0.01" material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.2"></a-text>
         </a-entity>
-        <a-entity id="choiceB" class="choice" position="0 0.5 0">
-          <a-plane width="3" height="0.8" material="color: #0055A4; opacity: 0.7"></a-plane>
-          <a-text value="" width="18" align="center" color="white" position="0 -0.3 0.01"></a-text>
+        <a-entity id="optionB" class="option" position="0 0.5 0">
+          <a-plane width="4" height="1" material="color: #0055A4; opacity: 0.7"></a-plane>
+          <a-text value="" width="22" align="center" color="white" position="0 -0.4 0.01" material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.2"></a-text>
         </a-entity>
-        <a-entity id="choiceC" class="choice" position="0 -0.5 0">
-          <a-plane width="3" height="0.8" material="color: #0055A4; opacity: 0.7"></a-plane>
-          <a-text value="" width="18" align="center" color="white" position="0 -0.3 0.01"></a-text>
+        <a-entity id="optionC" class="option" position="0 -1 0">
+          <a-plane width="4" height="1" material="color: #0055A4; opacity: 0.7"></a-plane>
+          <a-text value="" width="22" align="center" color="white" position="0 -0.4 0.01" material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.2"></a-text>
         </a-entity>
         <a-entity id="result-container" visible="false">
-          <a-text id="result-text" value="" position="0 1.5 0" width="20" align="center" color="yellow"></a-text>
+          <a-text id="result-text" value="" position="0 2 0" width="25" align="center" color="#FFD700" material="shader: standard; color: #FFD700; emissive: #000000; emissiveIntensity: 0.2"></a-text>
           <a-entity id="restart-btn" class="clickable" position="0 0 0">
-            <a-plane width="2" height="0.8" material="color: #009966; opacity: 0.7"></a-plane>
-            <a-text value="Розпочати знову" width="12" align="center" color="white" position="0 -0.3 0.01"></a-text>
+            <a-plane width="3" height="1" material="color: #FFD700; opacity: 0.7"></a-plane>
+            <a-text value="Розпочати знову" width="15" align="center" color="white" position="0 -0.4 0.01" material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.2"></a-text>
           </a-entity>
         </a-entity>
       </a-entity>
@@ -94,144 +94,120 @@
   <script>
     const marker = document.getElementById('marker');
     const scanText = document.getElementById('scanText');
-    const gameContainer = document.getElementById('game-container');
-    const eventText = document.getElementById('event-text');
-    const choiceA = document.getElementById('choiceA');
-    const choiceB = document.getElementById('choiceB');
-    const choiceC = document.getElementById('choiceC');
+    const quizContainer = document.getElementById('quiz-container');
+    const hintText = document.getElementById('hint-text');
+    const optionA = document.getElementById('optionA');
+    const optionB = document.getElementById('optionB');
+    const optionC = document.getElementById('optionC');
     const resultContainer = document.getElementById('result-container');
     const resultText = document.getElementById('result-text');
     const restartBtn = document.getElementById('restart-btn');
 
-    // Події шкільного дня (етапи гри)
-    const schoolEvents = [
+    // Символи України та підказки
+    const symbols = [
       {
-        event: "Ти приходиш до школи. Що робиш першим?",
-        choices: [
-          { text: "A) Вітаєшся з друзями", fun: 2, friends: 1 },
-          { text: "B) Йдеш до класу одразу", fun: 1, friends: 0 },
-          { text: "C) Досліджуєш шкільний двір", fun: 3, friends: 0.5 }
-        ]
+        name: "Вишиванка",
+        hint: "Це традиційний український одяг із яскравими візерунками."
       },
       {
-        event: "На уроці математики вчителька задає питання. Твоя дія?",
-        choices: [
-          { text: "A) Піднімаєш руку і відповідаєш", fun: 1, knowledge: 2 },
-          { text: "B) Шепочеш відповідь другові", fun: 2, knowledge: 1, friends: 1 },
-          { text: "C) Малюєш смішні картинки в зошиті", fun: 3, knowledge: 0 }
-        ]
+        name: "Калина",
+        hint: "Ця рослина з червоними ягодами символізує красу і любов."
       },
       {
-        event: "На перерві друзі пропонують пограти. Що обираєш?",
-        choices: [
-          { text: "A) Футбол на подвір'ї", fun: 3, energy: -1, friends: 2 },
-          { text: "B) Розмовляєш про канікули", fun: 2, energy: 0, friends: 1 },
-          { text: "C) Ховаєшся в шкільному саду", fun: 2.5, energy: -0.5, friends: 0.5 }
-        ]
+        name: "Писанка",
+        hint: "Це розписане яйце, яке дарують на Великдень."
       },
       {
-        event: "В їдальні обід. Що з'їси?",
-        choices: [
-          { text: "A) Здоровий салат і суп", fun: 1, energy: 2 },
-          { text: "B) Піцу з друзями", fun: 3, energy: 1, friends: 1 },
-          { text: "C) Солодощі потайки", fun: 2.5, energy: 0.5 }
-        ]
+        name: "Тризуб",
+        hint: "Це державний символ України, схожий на тризубець."
       },
       {
-        event: "Після уроків. Як завершиш день?",
-        choices: [
-          { text: "A) Допомагаєш прибирати клас", fun: 1, knowledge: 1, friends: 1 },
-          { text: "B) Граєш у ігри з однокласниками", fun: 3, friends: 2 },
-          { text: "C) Біжиш додому розповідати про день", fun: 2, energy: -1 }
-        ]
+        name: "Бандура",
+        hint: "Цей музичний інструмент використовують кобзарі."
+      },
+      {
+        name: "Рушник",
+        hint: "Вишиваний шматок тканини, який використовують на святах."
+      },
+      {
+        name: "Кобзар",
+        hint: "Це музикант, який співає думи під акомпанемент бандури."
+      },
+      {
+        name: "Козацька шабля",
+        hint: "Зброя, яку використовували козаки для захисту."
       }
     ];
 
-    // Рандомні події для різноманітності
-    const randomEvents = [
-      "Раптом вчителька розповідає смішний жарт! +1 веселощі",
-      "Ти знаходиш забуту іграшку в шкільному дворі! +1 друзі",
-      "На перерві падає дощ, але ви граєте під дахом. +1 енергія",
-      "Друг ділиться цукеркою. +0.5 веселощі",
-      "Ти допомагаєш новому учню знайти клас. +1 знання"
-    ];
+    let currentRound = 0;
+    let score = 0;
+    let currentSymbols = [];
+    const totalRounds = 5;
 
-    let currentEvent = 0;
-    let funLevel = 0;
-    let friendsMade = 0;
-    let knowledgeGained = 0;
-    let energyLeft = 5; // Початкова енергія
-
-    function startGame() {
-      currentEvent = 0;
-      funLevel = 0;
-      friendsMade = 0;
-      knowledgeGained = 0;
-      energyLeft = 5;
-      resultContainer.setAttribute('visible', false);
-      showEvent();
+    // Функція для перемішування масиву
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
 
-    function showEvent() {
-      if (currentEvent < schoolEvents.length && energyLeft > 0) {
-        const e = schoolEvents[currentEvent];
-        eventText.setAttribute('value', e.event);
-        choiceA.querySelector('a-text').setAttribute('value', e.choices[0].text);
-        choiceB.querySelector('a-text').setAttribute('value', e.choices[1].text);
-        choiceC.querySelector('a-text').setAttribute('value', e.choices[2].text);
+    function startGame() {
+      currentRound = 0;
+      score = 0;
+      resultContainer.setAttribute('visible', false);
+      // Вибираємо 5 випадкових символів для гри
+      currentSymbols = shuffle([...symbols]).slice(0, totalRounds);
+      showHint();
+    }
 
-        // Додаємо рандомну подію для різноманітності
-        if (Math.random() > 0.5) { // 50% шанс
-          const randomIndex = Math.floor(Math.random() * randomEvents.length);
-          const randomEvent = randomEvents[randomIndex];
-          eventText.setAttribute('value', e.event + '\n' + randomEvent);
-          // Застосовуємо ефект рандомної події
-          if (randomEvent.includes('веселощі')) funLevel += parseFloat(randomEvent.match(/\+([\d.]+)/)[1]);
-          if (randomEvent.includes('друзі')) friendsMade += parseFloat(randomEvent.match(/\+([\d.]+)/)[1]);
-          if (randomEvent.includes('енергія')) energyLeft += parseFloat(randomEvent.match(/\+([\d.]+)/)[1]);
-          if (randomEvent.includes('знання')) knowledgeGained += parseFloat(randomEvent.match(/\+([\d.]+)/)[1]);
-        }
+    function showHint() {
+      if (currentRound < totalRounds) {
+        const s = currentSymbols[currentRound];
+        hintText.setAttribute('value', s.hint);
+        // Вибираємо 3 випадкові варіанти відповідей, включаючи правильну
+        const options = [{ name: s.name, correct: true }];
+        const otherSymbols = symbols.filter(sym => sym.name !== s.name);
+        const wrongOptions = shuffle([...otherSymbols]).slice(0, 2).map(sym => ({ name: sym.name, correct: false }));
+        const allOptions = shuffle([...options, ...wrongOptions]);
+        optionA.querySelector('a-text').setAttribute('value', allOptions[0].name);
+        optionB.querySelector('a-text').setAttribute('value', allOptions[1].name);
+        optionC.querySelector('a-text').setAttribute('value', allOptions[2].name);
+        // Зберігаємо правильну відповідь для перевірки
+        optionA.correct = allOptions[0].correct;
+        optionB.correct = allOptions[1].correct;
+        optionC.correct = allOptions[2].correct;
       } else {
         showResult();
       }
     }
 
-    function handleChoice(choiceIndex) {
-      if (currentEvent >= schoolEvents.length) return;
-      const e = schoolEvents[currentEvent];
-      const selected = e.choices[choiceIndex];
-      funLevel += selected.fun || 0;
-      friendsMade += selected.friends || 0;
-      knowledgeGained += selected.knowledge || 0;
-      energyLeft += selected.energy || 0;
-
-      // Рандомне зменшення енергії для реалістичності
-      if (Math.random() > 0.7) {
-        energyLeft -= 0.5;
-        eventText.setAttribute('value', eventText.getAttribute('value') + '\nТрохи втомився... -0.5 енергія');
+    function handleAnswer(selectedOption) {
+      if (selectedOption.correct) {
+        score++;
       }
-
-      currentEvent++;
-      showEvent();
+      currentRound++;
+      showHint();
     }
 
     function showResult() {
-      eventText.setAttribute('value', '');
-      choiceA.querySelector('a-text').setAttribute('value', '');
-      choiceB.querySelector('a-text').setAttribute('value', '');
-      choiceC.querySelector('a-text').setAttribute('value', '');
+      hintText.setAttribute('value', '');
+      optionA.querySelector('a-text').setAttribute('value', '');
+      optionB.querySelector('a-text').setAttribute('value', '');
+      optionC.querySelector('a-text').setAttribute('value', '');
       let badge = '';
-      if (funLevel > 10) badge = 'Супер-веселий день! 🎉🎉🎉';
-      else if (funLevel > 5) badge = 'Веселий день! 🎉🎉';
-      else badge = 'Цікавий день! 🎉';
-      resultText.setAttribute('value', `Твій день у школі:\nВеселощі: ${funLevel}\nДрузі: ${friendsMade}\nЗнання: ${knowledgeGained}\nЕнергія: ${energyLeft}\n${badge}`);
+      if (score === 5) badge = 'Супер знавець символів! 🌟🌟🌟';
+      else if (score >= 3) badge = 'Молодець, знаєш символи! 🌟🌟';
+      else badge = 'Ти дізнався про символи! 🌟';
+      resultText.setAttribute('value', `Ти правильно відповів на ${score} з ${totalRounds} питань!\n${badge}`);
       resultContainer.setAttribute('visible', true);
     }
 
     // Додаємо обробники кліків
-    choiceA.addEventListener('click', () => handleChoice(0));
-    choiceB.addEventListener('click', () => handleChoice(1));
-    choiceC.addEventListener('click', () => handleChoice(2));
+    optionA.addEventListener('click', () => handleAnswer(optionA));
+    optionB.addEventListener('click', () => handleAnswer(optionB));
+    optionC.addEventListener('click', () => handleAnswer(optionC));
     restartBtn.addEventListener('click', startGame);
 
     // Події маркера
@@ -244,10 +220,10 @@
       scanText.style.display = 'block';
       // Скидаємо гру, щоб уникнути застрягання
       resultContainer.setAttribute('visible', false);
-      eventText.setAttribute('value', '');
-      choiceA.querySelector('a-text').setAttribute('value', '');
-      choiceB.querySelector('a-text').setAttribute('value', '');
-      choiceC.querySelector('a-text').setAttribute('value', '');
+      hintText.setAttribute('value', '');
+      optionA.querySelector('a-text').setAttribute('value', '');
+      optionB.querySelector('a-text').setAttribute('value', '');
+      optionC.querySelector('a-text').setAttribute('value', '');
     });
 
     // Перевірка доступу до камери
@@ -269,4 +245,3 @@
   </script>
 </body>
 </html>
-
