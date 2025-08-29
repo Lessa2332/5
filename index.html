@@ -2,15 +2,10 @@
 <html lang="uk">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AR Гра: Символи України</title>
-
-  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-
-  <!-- AR.js -->
   <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
-
   <style>
     html, body {
       margin: 0;
@@ -19,17 +14,16 @@
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      touch-action: manipulation; /* дозволяє кліки */
+      touch-action: none; /* Блокує масштабування */
       background: #000;
     }
-
     #scanText {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: #FFD700;
-      font-size: 1.8em;
+      font-size: 2em;
       font-weight: bold;
       text-shadow: 2px 2px 10px #000;
       background: rgba(0, 0, 0, 0.7);
@@ -40,7 +34,6 @@
       max-width: 400px;
       z-index: 100;
     }
-
     #smartLessaBtn {
       position: fixed;
       bottom: 20px;
@@ -56,23 +49,22 @@
       z-index: 100;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-
     #smartLessaBtn:hover {
       background: #003087;
     }
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:11 PM EEST — час пізнавати Україну!</div>
 
   <a-scene
     embedded
-    arjs="trackingMethod: best; detectionMode: mono_and_matrix; debugUIEnabled: false;"
+    arjs="trackingMethod: best; detectionMode: mono_and_matrix; sourceType: webcam; facingBack: true; debugUIEnabled: false;"
     renderer="colorFormat: rgba; clearAlpha: 0;"
     vr-mode-ui="enabled: false"
   >
     <a-marker preset="hiro" id="marker">
-      <a-entity id="quiz-container" position="0 0 0" rotation="-90 0 0" scale="0.12 0.12 0.12">
+      <a-entity id="quiz-container" position="0 0 0" rotation="-90 0 0" scale="0.2 0.2 0.2">
         <!-- Підказка -->
         <a-text
           id="hint-text"
@@ -81,9 +73,11 @@
           width="30"
           wrapCount="20"
           align="center"
-          color="#FFD700"
+          color="white"
+          material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
           position="0 3.5 0"
           side="double"
+          text-shadow="2px 2px 4px #000"
         ></a-text>
 
         <!-- Варіанти відповідей -->
@@ -97,8 +91,10 @@
             wrapCount="18"
             align="center"
             color="white"
+            material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
             position="0 -0.3 0.01"
             side="double"
+            text-shadow="2px 2px 4px #000"
           ></a-text>
         </a-entity>
 
@@ -112,8 +108,10 @@
             wrapCount="18"
             align="center"
             color="white"
+            material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
             position="0 -0.3 0.01"
             side="double"
+            text-shadow="2px 2px 4px #000"
           ></a-text>
         </a-entity>
 
@@ -127,8 +125,10 @@
             wrapCount="18"
             align="center"
             color="white"
+            material="shader: standard; color: white; emissive: #000000; emissiveIntensity: 0.3"
             position="0 -0.3 0.01"
             side="double"
+            text-shadow="2px 2px 4px #000"
           ></a-text>
         </a-entity>
 
@@ -142,10 +142,12 @@
             wrapCount="22"
             align="center"
             color="#FFD700"
+            material="shader: standard; color: #FFD700; emissive: #000000; emissiveIntensity: 0.3"
             position="0 2 0"
             side="double"
+            text-shadow="2px 2px 4px #000"
           ></a-text>
-          <a-entity id="restart-btn" position="0 0.5 0">
+          <a-entity id="restart-btn" class="clickable" position="0 0.5 0">
             <a-plane width="2.5" height="0.8" color="#FFD700" opacity="0.8"></a-plane>
             <a-text
               value="Розпочати знову"
@@ -153,14 +155,15 @@
               width="20"
               align="center"
               color="black"
+              material="shader: standard; color: black; emissive: #000000; emissiveIntensity: 0.3"
               position="0 -0.3 0.01"
               side="double"
+              text-shadow="2px 2px 4px #000"
             ></a-text>
           </a-entity>
         </a-entity>
       </a-entity>
     </a-marker>
-
     <a-entity camera></a-entity>
   </a-scene>
 
@@ -235,7 +238,7 @@
     function handleAnswer(option) {
       if (option.dataset.correct === 'true') score++;
       currentRound++;
-      setTimeout(showHint, 500);
+      setTimeout(showHint, 500); // Плавний перехід
     }
 
     function showResult() {
@@ -244,8 +247,11 @@
         opt.querySelector('.option-label').setAttribute('value', '');
       });
 
-      const stars = score === 5 ? '🌟🌟🌟' : score >= 3 ? '🌟🌟' : '🌟';
-      resultText.setAttribute('value', `Ти правильно відповів на ${score} з ${totalRounds} питань!\n${stars}`);
+      let badge = '';
+      if (score === 5) badge = 'Супер знавець символів! 🌟🌟🌟';
+      else if (score >= 3) badge = 'Молодець, знаєш символи! 🌟🌟';
+      else badge = 'Ти дізнався про символи! 🌟';
+      resultText.setAttribute('value', `Ти правильно відповів на ${score} з ${totalRounds} питань!\n${badge}`);
       resultContainer.setAttribute('visible', true);
     }
 
@@ -263,6 +269,9 @@
 
     marker.addEventListener('markerLost', () => {
       scanText.style.display = 'block';
+      resultContainer.setAttribute('visible', false);
+      hintText.setAttribute('value', '');
+      [optionA, optionB, optionC].forEach(opt => opt.querySelector('.option-label').setAttribute('value', ''));
     });
 
     // Фікс висоти
@@ -274,6 +283,7 @@
 
     // Перевірка камери
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(() => console.log('Доступ до камери надано'))
       .catch(err => {
         scanText.textContent = 'Дозвольте доступ до камери';
         console.error('Помилка камери:', err);
