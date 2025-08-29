@@ -29,12 +29,13 @@
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 11:18 PM EEST</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 11:23 PM EEST</div>
 
   <a-scene
     embedded
     arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: true;"
     vr-mode-ui="enabled: false"
+    vr-mode="false"
   >
     <a-marker preset="hiro" id="marker">
       <a-box position="0 0 0" rotation="0 0 0" color="#4CC3D9" scale="0.5 0.5 0.5"></a-box>
@@ -63,5 +64,3 @@
   </script>
 </body>
 </html>
-
-
