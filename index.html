@@ -55,11 +55,11 @@
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:32 PM EEST — час для знань!</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:38 PM EEST — час для знань!</div>
 
   <a-scene
     embedded
-    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false;"
+    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: true;"
     renderer="colorFormat: rgba; clearAlpha: 0;"
     vr-mode-ui="enabled: false"
   >
@@ -289,7 +289,8 @@
       navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         .then(stream => {
           console.log('Камера ініціалізована:', stream);
-          scene.components.ar.injectCameraStream(stream); // Ініціалізація камери як у прикладах AR.js
+          const arSystem = scene.systems.ar;
+          arSystem.setupCamera(stream); // Використання методу AR.js для ініціалізації камери
         })
         .catch(err => {
           scanText.textContent = 'Дозвольте доступ до камери або перевірте з’єднання.';
