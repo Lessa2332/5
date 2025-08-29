@@ -55,12 +55,12 @@
   </style>
 </head>
 <body>
-  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:38 PM EEST — час для знань!</div>
+  <div id="scanText">Наведи камеру на маркер Hiro<br>Сьогодні 29 серпня 2025, 09:45 PM EEST — час для знань!</div>
 
   <a-scene
     embedded
     arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: true;"
-    renderer="colorFormat: rgba; clearAlpha: 0;"
+    renderer="colorFormat: rgba; alpha: true; clearAlpha: 0;"
     vr-mode-ui="enabled: false"
   >
     <a-marker preset="hiro" id="marker">
@@ -289,8 +289,13 @@
       navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         .then(stream => {
           console.log('Камера ініціалізована:', stream);
-          const arSystem = scene.systems.ar;
-          arSystem.setupCamera(stream); // Використання методу AR.js для ініціалізації камери
+          const arSystem = scene.systems['ar'];
+          if (arSystem && arSystem.setupCamera) {
+            arSystem.setupCamera(stream); // Ініціалізація камери
+          } else {
+            console.error('AR система не ініціалізована');
+            scanText.textContent = 'Помилка ініціалізації AR. Перевірте консоль.';
+          }
         })
         .catch(err => {
           scanText.textContent = 'Дозвольте доступ до камери або перевірте з’єднання.';
